@@ -14,10 +14,19 @@ use core::mem::ManuallyDrop;
 
 use mbedtls_sys::types::raw_types::c_void;
 
+#[cfg(target_os = "macos")]
 extern "C" {
     #[link_name = concat!("\u{1}_forward_mbedtls_free_", env!("RUST_MBEDTLS_METADATA_HASH"))]
     pub(crate) fn mbedtls_free(n: *mut mbedtls_sys::types::raw_types::c_void);
     #[link_name = concat!("\u{1}_forward_mbedtls_calloc_", env!("RUST_MBEDTLS_METADATA_HASH"))]
+    pub(crate) fn mbedtls_calloc(n: mbedtls_sys::types::size_t, size: mbedtls_sys::types::size_t) -> *mut mbedtls_sys::types::raw_types::c_void;
+}
+
+#[cfg(not(target_os = "macos"))]
+extern "C" {
+    #[link_name = concat!("\u{1}forward_mbedtls_free_", env!("RUST_MBEDTLS_METADATA_HASH"))]
+    pub(crate) fn mbedtls_free(n: *mut mbedtls_sys::types::raw_types::c_void);
+    #[link_name = concat!("\u{1}forward_mbedtls_calloc_", env!("RUST_MBEDTLS_METADATA_HASH"))]
     pub(crate) fn mbedtls_calloc(n: mbedtls_sys::types::size_t, size: mbedtls_sys::types::size_t) -> *mut mbedtls_sys::types::raw_types::c_void;
 }
 
