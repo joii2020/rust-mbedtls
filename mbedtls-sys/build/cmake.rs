@@ -48,7 +48,7 @@ impl super::BuildConfig {
         );
 
         assert!(dst.pop());
-        dst.push("crypto");
+        // dst.push("crypto");
         dst.push("library");
         println!(
             "cargo:rustc-link-search=native={}",
